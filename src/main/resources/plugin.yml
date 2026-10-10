@@ -7,3 +7,9 @@ load: POSTWORLD
 
 authors: [ IllegalAccess ]
 website: felixschick.de/dev
+
+
+commands:
+  PlayTogetherEssential:
+    aliases:
+      - pte
