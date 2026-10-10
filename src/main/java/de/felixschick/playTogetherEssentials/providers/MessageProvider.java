@@ -1,6 +1,7 @@
 package de.felixschick.playTogetherEssentials.providers;
 
 import de.felixschick.playTogetherEssentials.PlayTogetherEssentials;
+import de.felixschick.playTogetherEssentials.utils.enums.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,8 +20,8 @@ public class MessageProvider {
         player.sendMessage(PREFIX +" §r§8| §r" +  message);
     }
 
-    public void sendNoPermissionMessage(Player player) {
-        sendMessage(player, "§4You don't have permission to use this action.");
+    public void sendMessage(Player player, Messages message) {
+        player.sendMessage(PREFIX +" §r§8| §r" +  message.message);
     }
 
 }
