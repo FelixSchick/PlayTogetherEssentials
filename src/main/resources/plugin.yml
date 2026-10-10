@@ -1,0 +1,9 @@
+name: PlayTogetherEssentials
+version: '${version}'
+
+main: de.felixschick.playTogetherEssentials.PlayTogetherEssentials
+api-version: '26.3'
+load: POSTWORLD
+
+authors: [ IllegalAccess ]
+website: felixschick.de/dev
