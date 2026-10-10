@@ -1,5 +1,6 @@
 package de.felixschick.playTogetherEssentials.commands;
 
+import de.felixschick.playTogetherEssentials.Menues.EssentialUserMenu;
 import de.felixschick.playTogetherEssentials.PlayTogetherEssentials;
 import de.felixschick.playTogetherEssentials.providers.MessageProvider;
 import de.felixschick.playTogetherEssentials.utils.enums.Messages;
@@ -47,12 +48,7 @@ public class PlayTogetherEssentialCommand implements CommandExecutor {
                             messageProvider.sendMessage(player, Messages.NO_PERMISSIONS);
                     }
                 } else {
-                    Inventory inventory = Bukkit.createInventory(player, 9*3, "§2Essentials Menu");
-                    for (int i = 0; i < inventory.getSize(); i++) {
-                        inventory.setItem(i, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
-                    }
-
-                    player.openInventory(inventory);
+                    EssentialUserMenu.openMenu(player);
                 }
 
 
