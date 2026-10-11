@@ -1,6 +1,6 @@
 package de.felixschick.playTogetherEssentials.commands;
 
-import de.felixschick.playTogetherEssentials.Menues.EssentialUserMenu;
+import de.felixschick.playTogetherEssentials.menues.EssentialUserMenu;
 import de.felixschick.playTogetherEssentials.PlayTogetherEssentials;
 import de.felixschick.playTogetherEssentials.providers.MessageProvider;
 import de.felixschick.playTogetherEssentials.utils.enums.Messages;
@@ -18,9 +18,12 @@ public class PlayTogetherEssentialCommand implements CommandExecutor {
 
     private final MessageProvider messageProvider;
 
+    private final EssentialUserMenu essentialUserMenu;
+
     public PlayTogetherEssentialCommand(PlayTogetherEssentials plugin) {
 
         this.messageProvider = plugin.messageProvider;
+        this.essentialUserMenu = plugin.essentialUserMenu;
     }
 
     @Override
@@ -31,24 +34,20 @@ public class PlayTogetherEssentialCommand implements CommandExecutor {
                 if (args.length > 0) {
                     if (args[0].equalsIgnoreCase("admin")) {
                         if (player.hasPermission("playtogetheressentials.playtogether.admin")) {
-                            Inventory inventory = Bukkit.createInventory(player, 9*3, "§2Essentials Admin Menu");
-                            for (int i = 0; i < inventory.getSize(); i++) {
-                                inventory.setItem(i, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
-                            }
-
                             if (args.length > 1) {
                                 if (Bukkit.getPlayer(args[1]) != null) {
                                     Player target = Bukkit.getPlayer(args[1]);
-                                    target.openInventory(inventory);
+                                    //TODO: admin menu
                                 } else
                                     messageProvider.sendMessage(player, Messages.NO_PLAYER_FOUND);
-                            } else
-                                player.openInventory(inventory);
+                            } else {
+                                //TODO: admin menu
+                            }
                         } else
                             messageProvider.sendMessage(player, Messages.NO_PERMISSIONS);
                     }
                 } else {
-                    EssentialUserMenu.openMenu(player);
+                    essentialUserMenu.openMenu(player);
                 }
 
 

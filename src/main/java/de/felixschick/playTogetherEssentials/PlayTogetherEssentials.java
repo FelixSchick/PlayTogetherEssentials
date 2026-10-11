@@ -1,6 +1,8 @@
 package de.felixschick.playTogetherEssentials;
 
-import de.felixschick.playTogetherEssentials.Menues.EssentialUserMenu;
+import de.felixschick.playTogetherEssentials.listeners.MenuClickListener;
+import de.felixschick.playTogetherEssentials.menues.EssentialUserMenu;
+import de.felixschick.playTogetherEssentials.menues.ParticleMenu;
 import de.felixschick.playTogetherEssentials.providers.MessageProvider;
 import de.felixschick.playTogetherEssentials.providers.ParticleProvider;
 import de.felixschick.playTogetherEssentials.utils.CommandRegisterHandler;
@@ -17,6 +19,12 @@ public final class PlayTogetherEssentials extends JavaPlugin {
     @Getter
     public MessageProvider messageProvider;
 
+    @Getter
+    public EssentialUserMenu essentialUserMenu;
+
+    @Getter
+    public ParticleMenu particleMenu;
+
     public ParticleProvider particleProvider;
 
     @Override
@@ -26,10 +34,13 @@ public final class PlayTogetherEssentials extends JavaPlugin {
 
         new ConfigurationHandler(this);
         this.messageProvider = new MessageProvider(this);
-
         this.particleProvider = new ParticleProvider(this);
 
-        Bukkit.getPluginManager().registerEvents(new EssentialUserMenu(), this);
+
+        this.particleMenu = new ParticleMenu(this);
+        this.essentialUserMenu = new EssentialUserMenu(this);
+
+        Bukkit.getPluginManager().registerEvents(new MenuClickListener(), this);
 
 
         CommandRegisterHandler commandRegisterHandler = new CommandRegisterHandler(this);
