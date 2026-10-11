@@ -1,10 +1,7 @@
 package de.felixschick.playTogetherEssentials.providers;
 
 import de.felixschick.playTogetherEssentials.PlayTogetherEssentials;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -22,29 +19,39 @@ public class ParticleProvider {
     }
 
     private void startParticleJob() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
                 for (UUID uuid : particlePlayers) {
                     Player player = Bukkit.getPlayer(uuid);
                     if (player != null) {
                         playParticle(player, player.getLocation());
-                        player.sendMessage("debug");
                     } else  {
                         particlePlayers.remove(uuid);
                     }
                 }
             }
-        }, 0L, 30L);
+        }, 0L, 1L);
     }
 
     public void addPlayer(Player player) {
         particlePlayers.add(player.getUniqueId());
     }
 
+    public void removePlayer(Player player) {
+        particlePlayers.remove(player.getUniqueId());
+    }
+
+    public void toggleParticle(Player player) {
+        if (particlePlayers.contains(player.getUniqueId())) {
+            particlePlayers.remove(player.getUniqueId());
+        } else
+            particlePlayers.add(player.getUniqueId());
+    }
+
     public void playParticle(Player player, Location center) {
         double radius = 2.0; // The radius of the circle in blocks
-        int points = 32;     // How many points/coordinates make up the circle
+        int points = 64;     // How many points/coordinates make up the circle
 
         for (int i = 0; i < points; i++) {
             double angle = 2 * Math.PI * i / points;
@@ -53,7 +60,8 @@ public class ParticleProvider {
             double y = center.getY();
 
             Location pointLocation = new Location(center.getWorld(), x, y, z);
-            player.spawnParticle(Particle.COMPOSTER, pointLocation, 1);
+            Particle.DustOptions dustOptions = new Particle.DustOptions(Color.PURPLE, 1F);
+            player.spawnParticle(Particle.DUST, pointLocation, 1, dustOptions);
         }
 
     }

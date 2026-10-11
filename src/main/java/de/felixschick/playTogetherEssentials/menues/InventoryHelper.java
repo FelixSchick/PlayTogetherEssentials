@@ -1,7 +1,5 @@
-package de.felixschick.playTogetherEssentials.Menues;
+package de.felixschick.playTogetherEssentials.menues;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
