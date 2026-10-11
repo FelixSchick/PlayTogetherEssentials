@@ -1,6 +1,7 @@
 package de.felixschick.playTogetherEssentials.Menues;
 
 import de.felixschick.playTogetherEssentials.PlayTogetherEssentials;
+import de.felixschick.playTogetherEssentials.utils.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,33 +15,40 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class EssentialUserMenu implements IInventoryMenu {
 
     public static final TextComponent title = Component.text("§4Essential Menu");
-    static Material fillerItemType = Material.BLACK_STAINED_GLASS_PANE;
+    static ItemStack fillerItem= new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName(Component.empty()).build();
+
 
     public static Inventory createMenu(Player player) {
-
-        ItemStack filler = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-        ItemMeta itemMeta = filler.getItemMeta();
-        itemMeta.customName(Component.empty());
-        filler.setItemMeta(itemMeta);
 
         //create inv
         Inventory essential = Bukkit.createInventory(player, 3 * 9, title);
 
-        ItemStack particalEffect = new ItemStack(Material.DRAGON_BREATH);
-        ItemMeta particalEffectMeta = filler.getItemMeta();
-        particalEffectMeta.customName(Component.text("Particles", NamedTextColor.YELLOW));
-        particalEffectMeta.lore( new ArrayList<> (Collections.singleton(Component.text("by activating this you get a circel around you", NamedTextColor.YELLOW))));
-        particalEffect.setItemMeta(particalEffectMeta);
+        boolean activatedParticles = PlayTogetherEssentials.getInstance().particleProvider.particlePlayers.contains(player.getUniqueId());
+        ItemStack particalEffect = new ItemBuilder(Material.DRAGON_BREATH)
+                .setDisplayName(Component.text("Particles", NamedTextColor.YELLOW))
+                .setGlow(
+                        activatedParticles
+                )
+                .addLoreAll(new ArrayList<>() {
+                    {
+                        add((activatedParticles? Component.text("§2aActive"): Component.text("§4inactive")));
+                    }
+                })
+                .build();
+
+
 
         essential.setItem(10, particalEffect);
 
 
-        InventoryHelper.fillInventory(essential, filler);
+        InventoryHelper.fillInventory(essential, fillerItem);
         return essential;
     }
 
@@ -54,15 +62,14 @@ public class EssentialUserMenu implements IInventoryMenu {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        event.getWhoClicked().sendMessage("test 1");
         if (event.getCurrentItem() == null) return;
-        event.getWhoClicked().sendMessage("test 2");
         if (event.getView().title().equals(title)) {
-            if (event.getCurrentItem().getType() == fillerItemType) {
+            if (event.getCurrentItem().equals(fillerItem)) {
                 event.setCancelled(true);
             } else if (event.getCurrentItem().getType() == Material.DRAGON_BREATH) {
-                PlayTogetherEssentials.getInstance().particleProvider.addPlayer((Player) event.getWhoClicked());
                 event.setCancelled(true);
+                PlayTogetherEssentials.getInstance().particleProvider.toggleParticle((Player) event.getWhoClicked());
+                openMenu((Player) event.getWhoClicked());
             } else {
                 event.getWhoClicked().sendMessage("Feature not implemented " + event.getCurrentItem().getType().name());
             }

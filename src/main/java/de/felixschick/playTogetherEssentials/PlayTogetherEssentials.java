@@ -9,15 +9,10 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.BitSet;
-
 public final class PlayTogetherEssentials extends JavaPlugin {
 
-    private PlayTogetherEssentials instance;
-
-    public static PlayTogetherEssentials getInstance() {
-        return getInstance();
-    }
+    @Getter
+    private static PlayTogetherEssentials instance;
 
     @Getter
     public MessageProvider messageProvider;
@@ -27,6 +22,8 @@ public final class PlayTogetherEssentials extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        instance = this;
+
         new ConfigurationHandler(this);
         this.messageProvider = new MessageProvider(this);
 
