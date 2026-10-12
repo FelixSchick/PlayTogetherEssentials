@@ -40,7 +40,7 @@ public final class PlayTogetherEssentials extends JavaPlugin {
         this.particleMenu = new ParticleMenu(this);
         this.essentialUserMenu = new EssentialUserMenu(this);
 
-        Bukkit.getPluginManager().registerEvents(new MenuClickListener(), this);
+        Bukkit.getPluginManager().registerEvents(new MenuClickListener(this), this);
 
 
         CommandRegisterHandler commandRegisterHandler = new CommandRegisterHandler(this);
