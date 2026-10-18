@@ -19,10 +19,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ParticleMenu implements IInventoryMenu {
 
     private final PlayTogetherEssentials plugin;
+
+    private final PTEParticles[] particles = PTEParticles.values();
 
     public ParticleMenu(PlayTogetherEssentials plugin) {
         this.plugin = plugin;
@@ -40,7 +43,7 @@ public class ParticleMenu implements IInventoryMenu {
 
     public Inventory createMenu(Player player, IInventoryMenu backTo, int page) {
 
-        PTEParticles[] particles = PTEParticles.values();
+
         int particleItemsCount = particles.length;
 
         int rowsTotal = Math.ceilDiv(particleItemsCount, 7);
@@ -82,10 +85,10 @@ public class ParticleMenu implements IInventoryMenu {
 
                         boolean activatedParticles = false; //plugin.particleProvider.particlePlayers.contains(player.getUniqueId());
                         ItemStack particalEffect = new ItemBuilder(particle.material)
-                                .setDisplayName(Component.text(particle.title, NamedTextColor.YELLOW))
+                                .setDisplayName(particle.title)
                                 .addLoreAll(new ArrayList<>() {
                                     {
-                                        add(Component.text(particle.description, NamedTextColor.GRAY));
+                                        add(particle.description);
                                         add((activatedParticles? Component.text("§2aactive"): Component.text("§4inactive")));
                                     }
                                 })
@@ -166,8 +169,17 @@ public class ParticleMenu implements IInventoryMenu {
                     event.setCancelled(true);
                 }
             } else {
-                event.setCancelled(true);
-                event.getWhoClicked().sendMessage("Feature not implemented " + event.getCurrentItem().getType().name());
+                Stream<PTEParticles> pteParticlesStream = Arrays.stream(particles).filter(particle -> particle.material.equals(event.getCurrentItem().getType()) &&
+                        particle.title.equals(event.getCurrentItem().displayName()));
+                if (pteParticlesStream.findAny().isPresent()) {
+                    event.setCancelled(true);
+                    //TODO: implement actual logic
+                    PTEParticles pteParticle = pteParticlesStream.findAny().get();
+                    System.out.println(pteParticle.title);
+                } else {
+                    event.setCancelled(true);
+                    event.getWhoClicked().sendMessage("Feature not implemented " + event.getCurrentItem().getType().name());
+                }
             }
         }
     }
